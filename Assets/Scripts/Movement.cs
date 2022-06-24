@@ -53,6 +53,6 @@ public class Movement : MonoBehaviour
     }
     void Move()
     {
-        _rigidbody2D.velocity = _moveDirection * _speed;
+        _rigidbody2D.velocity = _moveDirection * _speed;    
     }
 }
