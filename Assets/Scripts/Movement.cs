@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -8,7 +6,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private Rigidbody2D _rigidbody2D;
     private Vector3 _moveDirection;
 
-    void Update()
+    private void Update()
     {
         Handleinput();
     }
@@ -22,7 +20,6 @@ public class Movement : MonoBehaviour
     {
         float shiftX = 0.0f;
         float shiftY = 0.0f;
-
 
         if (Input.GetKey(KeyCode.A))
         {
@@ -49,6 +46,6 @@ public class Movement : MonoBehaviour
 
     private void Move()
     {
-        _rigidbody2D.velocity = _moveDirection * _speed;    
+        _rigidbody2D.velocity = _moveDirection * _speed;
     }
 }

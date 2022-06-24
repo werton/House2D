@@ -1,14 +1,12 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Siren : MonoBehaviour
 {
+    private readonly float _minVolume = 0.01f;
+    private readonly float _maxVolume = 1.0f;
+    private readonly float _volumeStep = 0.1f;
     private AudioSource _audioSource;
     private bool _isAlarmEnabled = false;
-    private float _minVolume = 0.01f;
-    private float _maxVolume = 1.0f;
-    private float _volumeStep = 0.1f;
-
 
     private void Start()
     {
@@ -16,7 +14,6 @@ public class Siren : MonoBehaviour
         _audioSource.volume = _minVolume;
         _audioSource.loop = true;
     }
-
 
     private void Update()
     {
@@ -31,7 +28,6 @@ public class Siren : MonoBehaviour
         {
             if (_audioSource.isPlaying == true)
             {
-
                 if (_audioSource.volume > _minVolume)
                 {
                     DecreaseVolume();
@@ -48,6 +44,7 @@ public class Siren : MonoBehaviour
     {
         _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _maxVolume, _volumeStep * Time.deltaTime);
     }
+
     private void DecreaseVolume()
     {
         _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _minVolume, _volumeStep * Time.deltaTime);
@@ -62,7 +59,6 @@ public class Siren : MonoBehaviour
         }
     }
 
-
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.TryGetComponent<Player>(out Player player))
@@ -74,4 +70,3 @@ public class Siren : MonoBehaviour
         }
     }
 }
-
