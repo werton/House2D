@@ -53,9 +53,6 @@ public class Movement : MonoBehaviour
     }
     void Move()
     {
-        transform.Rotate(_moveDirection);
         _rigidbody2D.velocity = _moveDirection * _speed;
-        //_rigidbody2D.MovePosition(transform.position + _moveDirection * _speed * Time.deltaTime);
-
     }
 }
