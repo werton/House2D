@@ -419,7 +419,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 314497341}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2040ce5b5c3851c4b90e5a29a725aebd, type: 3}
+  m_Script: {fileID: 11500000, guid: e688c9c8bc9758c47a818f7dbe6418ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &519420028
@@ -646,21 +646,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 903e8e74b9ea00e45a0e9e305c2a3fb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _catched:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 904772295}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!61 &904772298
 BoxCollider2D:
   m_ObjectHideFlags: 0

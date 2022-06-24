@@ -3,8 +3,6 @@ using UnityEngine.Events;
 
 public class Siren : MonoBehaviour
 {
-    [SerializeField] private UnityEvent _catched;
-
     private AudioSource _audioSource;
     private bool _isAlarmEnabled = false;
     private float _minVolume = 0.01f;
