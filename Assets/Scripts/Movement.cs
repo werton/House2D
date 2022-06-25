@@ -18,28 +18,8 @@ public class Movement : MonoBehaviour
 
     private void Handleinput()
     {
-        float shiftX = 0.0f;
-        float shiftY = 0.0f;
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            shiftX = -1.0f;
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            shiftX = +1.0f;
-        }
-
-        if (Input.GetKey(KeyCode.W))
-        {
-            shiftY = +1.0f;
-        }
-
-        if (Input.GetKey(KeyCode.S))
-        {
-            shiftY = -1.0f;
-        }
+        float shiftX = Input.GetAxis("Horizontal");
+        float shiftY = Input.GetAxis("Vertical");
 
         _moveDirection = new Vector3(shiftX, shiftY).normalized;
     }

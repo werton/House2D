@@ -1,12 +1,15 @@
+using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class Siren : MonoBehaviour
 {
     private readonly float _minVolume = 0.01f;
     private readonly float _maxVolume = 1.0f;
     private readonly float _volumeStep = 0.1f;
     private AudioSource _audioSource;
-    private bool _isAlarmEnabled = false;
+    private Coroutine _increaseVolumeCoroutine;
+    private Coroutine _decreaseVolumeCoroutine;
 
     private void Start()
     {
@@ -17,45 +20,43 @@ public class Siren : MonoBehaviour
 
     private void Update()
     {
-        if (_isAlarmEnabled == true)
+    }
+
+    private IEnumerator IncreaseVolumeToMax()
+    {
+        while (_audioSource.volume < _maxVolume)
         {
-            if (_audioSource.volume < _maxVolume)
-            {
-                IncreaseVolume();
-            }
-        }
-        else
-        {
-            if (_audioSource.isPlaying == true)
-            {
-                if (_audioSource.volume > _minVolume)
-                {
-                    DecreaseVolume();
-                }
-                else
-                {
-                    _audioSource.Stop();
-                }
-            }
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _maxVolume, _volumeStep * Time.deltaTime);
+            yield return null;
         }
     }
 
-    private void IncreaseVolume()
+    private IEnumerator DecreaseVolumeToStop()
     {
-        _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _maxVolume, _volumeStep * Time.deltaTime);
-    }
+        while (_audioSource.volume > _minVolume)
+        {
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _minVolume, _volumeStep * Time.deltaTime);
+            yield return null;
+        }
 
-    private void DecreaseVolume()
-    {
-        _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _minVolume, _volumeStep * Time.deltaTime);
+        _audioSource.Stop();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.TryGetComponent<Player>(out Player player))
         {
-            _isAlarmEnabled = true;
-            _audioSource.Play();
+            if (_audioSource.isPlaying == false)
+            {
+                _audioSource.Play();
+            }
+
+            if (_decreaseVolumeCoroutine != null)
+            {
+                StopCoroutine(_decreaseVolumeCoroutine);
+            }
+
+            _increaseVolumeCoroutine = StartCoroutine(IncreaseVolumeToMax());
         }
     }
 
@@ -63,10 +64,12 @@ public class Siren : MonoBehaviour
     {
         if (collision.TryGetComponent<Player>(out Player player))
         {
-            if (_isAlarmEnabled == true)
+            if (_increaseVolumeCoroutine != null)
             {
-                _isAlarmEnabled = false;
+                StopCoroutine(_increaseVolumeCoroutine);
             }
+
+            _decreaseVolumeCoroutine = StartCoroutine(DecreaseVolumeToStop());
         }
     }
 }
