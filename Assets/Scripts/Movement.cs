@@ -4,6 +4,7 @@ public class Movement : MonoBehaviour
 {
     [SerializeField] private float _speed;
     [SerializeField] private Rigidbody2D _rigidbody2D;
+
     private Vector3 _moveDirection;
 
     private void Update()

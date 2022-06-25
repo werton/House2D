@@ -8,8 +8,9 @@ public class Siren : MonoBehaviour
     private readonly float _maxVolume = 1.0f;
     private readonly float _volumeStep = 0.1f;
     private AudioSource _audioSource;
-    private Coroutine _increaseVolumeCoroutine;
-    private Coroutine _decreaseVolumeCoroutine;
+    private Coroutine _volumeChangerCoroutine;
+
+    private delegate void Callback();
 
     private void Start()
     {
@@ -22,24 +23,25 @@ public class Siren : MonoBehaviour
     {
     }
 
-    private IEnumerator IncreaseVolumeToMax()
+    private IEnumerator ChangeVolume(float targetVolume, Callback onReachCallback=null)
     {
-        while (_audioSource.volume < _maxVolume)
+        while (_audioSource.volume != targetVolume)
         {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _maxVolume, _volumeStep * Time.deltaTime);
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, targetVolume, _volumeStep * Time.deltaTime);
             yield return null;
         }
+
+        onReachCallback?.Invoke();
     }
 
-    private IEnumerator DecreaseVolumeToStop()
+    private void StartVolumeChangerCoroutine(IEnumerator coroutine)
     {
-        while (_audioSource.volume > _minVolume)
+        if (_volumeChangerCoroutine != null)
         {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _minVolume, _volumeStep * Time.deltaTime);
-            yield return null;
+            StopCoroutine(_volumeChangerCoroutine);
         }
 
-        _audioSource.Stop();
+        _volumeChangerCoroutine = StartCoroutine(coroutine);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -51,12 +53,7 @@ public class Siren : MonoBehaviour
                 _audioSource.Play();
             }
 
-            if (_decreaseVolumeCoroutine != null)
-            {
-                StopCoroutine(_decreaseVolumeCoroutine);
-            }
-
-            _increaseVolumeCoroutine = StartCoroutine(IncreaseVolumeToMax());
+            StartVolumeChangerCoroutine(ChangeVolume(_maxVolume));
         }
     }
 
@@ -64,12 +61,7 @@ public class Siren : MonoBehaviour
     {
         if (collision.TryGetComponent<Player>(out Player player))
         {
-            if (_increaseVolumeCoroutine != null)
-            {
-                StopCoroutine(_increaseVolumeCoroutine);
-            }
-
-            _decreaseVolumeCoroutine = StartCoroutine(DecreaseVolumeToStop());
+            StartVolumeChangerCoroutine(ChangeVolume(_minVolume, _audioSource.Stop));
         }
     }
 }
