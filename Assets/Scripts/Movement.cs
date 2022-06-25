@@ -18,8 +18,8 @@ public class Movement : MonoBehaviour
 
     private void Handleinput()
     {
-        float shiftX = Input.GetAxis("Horizontal");
-        float shiftY = Input.GetAxis("Vertical");
+        float shiftX = Input.GetAxisRaw("Horizontal");
+        float shiftY = Input.GetAxisRaw("Vertical");
 
         _moveDirection = new Vector3(shiftX, shiftY).normalized;
     }
